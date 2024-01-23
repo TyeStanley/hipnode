@@ -1,0 +1,272 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .bold-30 {
+    @apply text-[30px] font-bold leading-[40px];
+  }
+
+  .bold-26 {
+    @apply text-[26px] font-bold leading-[38px];
+  }
+
+  .semibold-26 {
+    @apply text-[26px] font-semibold leading-[38px];
+  }
+
+  .bold-18 {
+    @apply text-[18px] font-bold leading-[28px];
+  }
+
+  .semibold-18 {
+    @apply text-[18px] font-semibold leading-[26px];
+  }
+
+  .regular-18 {
+    @apply text-[18px] font-normal leading-[26px];
+  }
+
+  .base-18 {
+    @apply text-[18px] leading-[26px];
+  }
+
+  .bold-16 {
+    @apply text-[16px] font-bold leading-[24px];
+  }
+
+  .semibold-16 {
+    @apply text-[16px] font-semibold leading-[24px];
+  }
+
+  .regular-16 {
+    @apply text-[16px] font-normal leading-[24px];
+  }
+
+  .bold-14 {
+    @apply text-[14px] font-bold leading-[22px];
+  }
+
+  .semibold-14 {
+    @apply text-[14px] font-semibold leading-[22px];
+  }
+
+  .regular-14 {
+    @apply text-[14px] font-normal leading-[22px];
+  }
+
+  .base-14 {
+    @apply text-[14px] leading-[22px];
+  }
+
+  .semibold-12 {
+    @apply text-[12px] font-semibold leading-[18px];
+  }
+
+  .regular-12 {
+    @apply text-[12px] font-normal leading-[18px];
+  }
+
+  .base-12 {
+    @apply text-[12px] leading-[18px];
+  }
+
+  .semibold-10 {
+    @apply text-[10px] font-semibold leading-[16px];
+  }
+
+  .regular-10 {
+    @apply text-[10px] font-normal leading-[16px];
+  }
+
+  .base-10 {
+    @apply text-[10px] leading-[16px];
+  }
+
+  .semibold-9 {
+    @apply text-[9px] font-semibold leading-[14px];
+  }
+
+  .regular-9 {
+    @apply text-[9px] font-normal leading-[14px];
+  }
+
+  .base-9 {
+    @apply text-[9px] leading-[14px];
+  }
+
+  .bg-light_dark-3 {
+    @apply bg-light dark:bg-dark-3;
+  }
+
+  .bg-light-2_dark-2 {
+    @apply bg-light-2 dark:bg-dark-2;
+  }
+
+  .bg-light_dark-4 {
+    @apply bg-light dark:bg-dark-4;
+  }
+
+  .bg-light-2_dark-4 {
+    @apply bg-light-2 dark:bg-dark-4;
+  }
+
+  .bg-light-3_dark-3 {
+    @apply bg-light-3 dark:bg-dark-3;
+  }
+
+  .bg-light-3_dark-4 {
+    @apply bg-light-3 dark:bg-dark-4;
+  }
+
+  .text-sc-1_light-2 {
+    @apply text-sc-1 dark:text-light-2;
+  }
+
+  .text-sc-2_light {
+    @apply text-sc-2 dark:text-light;
+  }
+
+  .text-sc-2_light-2 {
+    @apply text-sc-2 dark:text-light-2;
+  }
+
+  .text-sc-3_light-6 {
+    @apply text-sc-3 dark:text-light-3;
+  }
+
+  .text-sc-4_light-2 {
+    @apply text-sc-4 dark:text-light-2;
+  }
+
+  .general-pages-styles {
+    @apply bg-light-2_dark-2 mt-[-5rem] flex min-h-screen w-screen justify-center p-5 pb-[5.5rem] lg:h-screen;
+  }
+
+  .dynamic-pages-styles {
+    @apply bg-light-2_dark-2 mt-[-5rem] flex h-screen w-screen justify-center p-5 pb-[5.5rem] pt-24;
+  }
+
+  /* Onboarding component styles */
+  .onboarding-page {
+    @apply flex w-screen flex-col dark:bg-dark-2 md:min-h-screen md:flex-row;
+  }
+
+  .onboarding-background {
+    @apply flex h-auto w-full grow flex-col items-center bg-light-2 p-[1.875rem] dark:bg-dark-2 md:min-h-screen md:w-1/2 md:p-10;
+  }
+
+  .onboarding-main-div {
+    @apply mt-[3.75rem] flex max-w-[27.625rem] flex-col gap-10 md:mt-20;
+  }
+
+  .onboarding-heading {
+    @apply semibold-18 md:bold-30 text-sc-2 dark:text-light;
+  }
+
+  .onboarding-answer-container {
+    @apply flex flex-col gap-5;
+  }
+
+  .onboarding-card-small {
+    @apply flex items-center gap-5 rounded-lg bg-light p-5 dark:bg-dark-3;
+  }
+
+  .onboarding-card-small-image {
+    @apply flex h-[3.75rem] w-[3.75rem] dark:bg-dark-4 rounded-lg p-5;
+  }
+
+  .onboarding-card-small-text {
+    @apply semibold-14 md:semibold-18 dark:text-light-3;
+  }
+
+  /* Sign In and Sign Up styles */
+
+  .sign-up-background {
+    @apply flex w-screen flex-col md:min-h-screen md:flex-row;
+  }
+
+  .clerk-modal-background {
+    @apply flex w-full justify-center py-8 dark:bg-dark-3 md:w-1/2 md:py-20;
+  }
+
+  .clerk-modal-container {
+    @apply relative dark:bg-dark-3 flex h-fit w-full max-w-[32rem] md:max-w-[32rem];
+  }
+
+  .clerk-modal-logo {
+    @apply absolute left-14 top-10 flex;
+  }
+
+  /* Questionnaire form styles */
+
+  .questionnaire-form-background {
+    @apply flex h-full w-full grow flex-col items-center bg-light-2 p-[1.875rem] dark:bg-dark-2 md:min-h-screen md:w-1/2 md:bg-light md:p-10 md:dark:bg-dark-3;
+  }
+
+  .questionnaire-main-div {
+    @apply mt-[1.875rem] flex w-full max-w-[27.625rem] flex-col gap-10 md:mt-[7.37rem];
+  }
+
+  .questionnaire-container {
+    @apply flex flex-col gap-10;
+  }
+
+  .questionnaire-heading {
+    @apply semibold-18 md:bold-30 text-sc-2 dark:text-light;
+  }
+
+  .questionnaire-blue-span {
+    @apply regular-16 mb-5 text-blue-80;
+  }
+
+  .questionnaire-answer {
+    @apply cursor-pointer rounded-lg p-4;
+  }
+
+  .questionnaire-answer-text {
+    @apply semibold-14 md:semibold-18;
+  }
+
+  .questionnaire-button-container {
+    @apply flex flex-col gap-5;
+  }
+
+  .questionnaire-button {
+    @apply semibold-18 flex h-[2.875rem] items-center justify-center self-start rounded-lg text-light-2 transition duration-200;
+  }
+
+  .questionnaire-footer-text {
+    @apply text-sc-2 dark:text-light-2;
+  }
+
+  .questionnaire-footer-span-text {
+    @apply semibold-14 cursor-pointer text-red-80;
+  }
+
+  .react-tags__combobox-input {
+    @apply placeholder:text-sc-3 placeholder:regular-12 placeholder:sm:regular-14;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: none;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  .action-popover {
+    @apply pb-[0.875rem] font-[1.625rem] leading-[2.375rem] text-sc-2 dark:text-light-2 lg:pb-[1.25rem];
+  }
+}
+
+.notification_type-icon {
+  filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+.font-feature {
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
+}

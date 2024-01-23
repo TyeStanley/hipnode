@@ -1,0 +1,418 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                      Int                      @id @default(autoincrement())
+  clerkId                 String                   @unique
+  name                    String
+  username                String                   @unique
+  email                   String                   @unique
+  password                String?
+  title                   String?
+  points                  Int                      @default(0)
+  role                    Role                     @default(USER)
+  bio                     String?
+  website                 String?
+  facebook                String?
+  twitter                 String?
+  instagram               String?
+  picture                 String
+  location                String?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  ChatroomUsers           ChatroomUsers[]
+  comments                Comment[]
+  interviews              Interview[]
+  likes                   Like[]
+  meetup                  MeetUp[]
+  Message                 Message[]
+  onboarding              Onboarding?
+  podcasts                Podcast[]
+  posts                   Post[]
+  Share                   Share[]
+  shows                   Shows[]
+  subscribedShows         UsersSubscribedToShows[]
+  groupAdmin              Group[]                  @relation("GroupAdmins")
+  groups                  Group[]                  @relation("UserGroups")
+  followers               Follower[]               @relation("followed")
+  following               Follower[]               @relation("follower")
+  notificationReceiver    Notification[]           @relation("Receiver")
+  notificationSender      Notification[]           @relation("Sender")
+  notificationLastChecked DateTime                 @default(now())
+  Views                   View[]
+  activities              Activities[]
+  ChatNotification        ChatNotification[]
+}
+
+model Activities {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId Int?
+  post   Post? @relation(fields: [postId], references: [id])
+
+  interviewId Int?
+  interview   Interview? @relation(fields: [interviewId], references: [id])
+
+  meetupId Int?
+  meetup   MeetUp? @relation(fields: [meetupId], references: [id])
+
+  podcastId Int?
+  podcast   Podcast? @relation(fields: [podcastId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Follower {
+  id         Int @id @default(autoincrement())
+  followerId Int // ID of the user who follows
+  followedId Int // ID of the user being followed
+
+  follower      User           @relation(fields: [followerId], references: [id], name: "follower", onDelete: Cascade)
+  followed      User           @relation(fields: [followedId], references: [id], name: "followed", onDelete: Cascade)
+  notifications Notification[]
+
+  @@unique([followerId, followedId]) // Ensures that the same follow relationship can't be created more than once
+}
+
+model Onboarding {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @unique
+  businessStage String
+  codeAbility   String
+  interests     String[]
+  isOnboarded   Boolean
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id          Int          @id @default(autoincrement())
+  content     String
+  contentType String
+  authorId    Int
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  isEdited    Boolean      @default(false)
+  viewCount   Int          @default(0)
+  likeCount   Int          @default(0)
+  image       String
+  blurImage   String
+  imageWidth  Int
+  imageHeight Int
+  groupId     Int
+  heading     String
+  clerkId     String?
+  comments    Comment[]
+  likes       Like[]
+  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  group       Group?       @relation(fields: [groupId], references: [id])
+  Share       Share[]
+  Views       View[]
+  tags        TagOnPost[]
+  Activities  Activities[]
+}
+
+model View {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model Like {
+  id            Int            @id @default(autoincrement())
+  userId        Int
+  postId        Int?
+  commentId     Int?
+  liked         Boolean        @default(true)
+  comment       Comment?       @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  post          Post?          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifications Notification[]
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+}
+
+model Comment {
+  id                         Int            @id @default(autoincrement())
+  content                    String         @db.VarChar(150)
+  authorId                   Int
+  postId                     Int
+  parentId                   Int?
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+  isEdited                   Boolean        @default(false)
+  author                     User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent                     Comment?       @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
+  replies                    Comment[]      @relation("CommentToComment")
+  post                       Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  likes                      Like[]
+  likeCount                  Int            @default(0)
+  notifications              Notification[] @relation("CommentToNotification")
+  parentCommentNotifications Notification[] @relation("CommentParentToNotification")
+}
+
+model Tag {
+  id    Int         @id @default(autoincrement())
+  name  String      @unique
+  posts TagOnPost[]
+}
+
+model TagOnPost {
+  id     Int  @id @default(autoincrement())
+  postId Int
+  tagId  Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id])
+
+  @@unique([postId, tagId])
+}
+
+model Shows {
+  id          Int                      @id @default(autoincrement())
+  name        String                   @unique
+  userId      Int
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  podcasts    Podcast[]
+  user        User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscribers UsersSubscribedToShows[]
+}
+
+model Podcast {
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  details       String
+  episodeNumber Int          @default(autoincrement())
+  image         String
+  contentType   String
+  clerkId       String?
+  showId        Int
+  title         String
+  updatedAt     DateTime     @updatedAt
+  url           String
+  userId        Int
+  show          Shows        @relation(fields: [showId], references: [id], onDelete: Cascade)
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activities    Activities[]
+}
+
+model UsersSubscribedToShows {
+  id     Int   @id @default(autoincrement())
+  userId Int
+  showId Int
+  show   Shows @relation(fields: [showId], references: [id])
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, showId])
+}
+
+model Group {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  coverImage  String?
+  createdBy   Int
+  description String?  @db.VarChar(300)
+  logo        String?
+  name        String   @unique
+  updatedAt   DateTime @updatedAt
+  posts       Post[]
+  admins      User[]   @relation("GroupAdmins")
+  members     User[]   @relation("UserGroups")
+}
+
+model MeetUp {
+  id                  Int            @id @default(autoincrement())
+  createdAt           DateTime       @default(now())
+  contactEmail        String
+  contactNumber       String
+  image               String
+  contentType         String
+  clerkId             String?
+  location            String
+  responsiblePersonId Int
+  summary             String
+  title               String
+  updatedAt           DateTime       @updatedAt
+  responsiblePerson   User           @relation(fields: [responsiblePersonId], references: [id], onDelete: Cascade)
+  tags                TagOnMeetup[]
+  notifications       Notification[]
+  activities          Activities[]
+}
+
+model MeetupTag {
+  id      Int           @id @default(autoincrement())
+  name    String        @unique
+  meetups TagOnMeetup[]
+}
+
+model TagOnMeetup {
+  id       Int       @id @default(autoincrement())
+  meetupId Int
+  tagId    Int
+  meetup   MeetUp    @relation(fields: [meetupId], references: [id], onDelete: Cascade)
+  tag      MeetupTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([meetupId, tagId])
+}
+
+model InterviewTag {
+  id         Int              @id @default(autoincrement())
+  name       String           @unique
+  interviews TagOnInterview[]
+}
+
+model TagOnInterview {
+  id          Int          @id @default(autoincrement())
+  interviewId Int
+  tagId       Int
+  interview   Interview    @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  tag         InterviewTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([interviewId, tagId])
+}
+
+model Interview {
+  id           Int              @id @default(autoincrement())
+  createdAt    DateTime         @default(now())
+  creatorId    Int
+  title        String
+  contentType  String
+  clerkId      String?
+  bannerImage  String
+  details      String
+  websiteLink  String
+  salary       Int
+  salaryPeriod String
+  updates      Int
+  updatedAt    DateTime         @updatedAt
+  creator      User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  tags         TagOnInterview[]
+  activities   Activities[]
+}
+
+model Chatroom {
+  id               Int                @id @default(autoincrement())
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  ChatroomUsers    ChatroomUsers[]
+  Message          Message[]
+  ChatNotification ChatNotification[]
+}
+
+model ChatroomUsers {
+  userId     Int
+  chatroomId Int
+  Chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
+  User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, chatroomId])
+}
+
+model Message {
+  id               Int                @id @default(autoincrement())
+  text             String?
+  createdAt        DateTime           @default(now())
+  userId           Int
+  receiverUserId   Int
+  chatroomId       Int
+  attachment       String?
+  attachmentType   String?
+  messageUUID      String             @unique
+  Chatroom         Chatroom           @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
+  User             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ChatNotification ChatNotification[]
+}
+
+model Share {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  postId    Int
+  createdAt DateTime @default(now())
+  Post      Post     @relation(fields: [postId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id              Int              @id @default(autoincrement())
+  userId          Int
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  senderName      String
+  image           String
+  date            String
+  type            NotificationType
+  isRead          Boolean?         @default(false)
+  isFollowed      Boolean?         @default(false)
+  commentContent  String?
+  title           String?          @db.VarChar(300)
+  meetupId        Int?
+  commentId       Int?
+  likeId          Int?
+  followerId      Int?
+  commentParentId Int?
+
+  receiver      User      @relation("Receiver", fields: [userId], references: [id], onDelete: Cascade)
+  sender        User      @relation("Sender", fields: [senderName], references: [username], onDelete: Cascade)
+  meetup        MeetUp?   @relation(fields: [meetupId], references: [id], onDelete: Cascade)
+  comment       Comment?  @relation("CommentToNotification", fields: [commentId], references: [id], onDelete: Cascade)
+  like          Like?     @relation(fields: [likeId], references: [id], onDelete: Cascade)
+  follower      Follower? @relation(fields: [followerId], references: [id], onDelete: Cascade)
+  commentParent Comment?  @relation("CommentParentToNotification", fields: [commentParentId], references: [id], onDelete: Cascade)
+}
+
+enum NotificationType {
+  COMMENT
+  REACTION
+  MENTION
+  MEETUP
+  FOLLOWER
+  REPLY
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model OnlineUser {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  enteredAt DateTime @default(now())
+}
+
+model ChatNotification {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  chatroomId      Int
+  userId          Int
+  receiverUserId  Int
+  messageId       Int
+  hasBeenRead     Boolean  @default(false)
+  hasBeenNotified Boolean  @default(false)
+  count           Int      @default(1)
+
+  Chatroom Chatroom @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
+  User     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Message  Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([chatroomId, userId, messageId], name: "idx_chat_notification")
+}

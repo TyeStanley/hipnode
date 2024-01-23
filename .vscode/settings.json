@@ -1,0 +1,15 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.addMissingImports": "always"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": ["chatrooms", "Hipnode", "livechat", "negan"],
+  "prettier.singleQuote": false,
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "[prisma]": { "editor.defaultFormatter": "Prisma.prisma" }
+}
