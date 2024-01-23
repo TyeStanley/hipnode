@@ -257,11 +257,22 @@ export async function isLoggedInUserOnboarded(
   clerkId: string
 ): Promise<boolean> {
   try {
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
       where: {
         clerkId,
       },
     });
+
+    let attempts = 0;
+    while (!user && attempts < 5) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      user = await prisma.user.findUnique({
+        where: {
+          clerkId,
+        },
+      });
+      attempts++;
+    }
 
     if (!user) {
       throw new Error(`No user found for clerkId: ${clerkId}`);
