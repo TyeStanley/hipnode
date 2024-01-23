@@ -9,7 +9,14 @@ import { onboardingSideScreenInfo } from "@/constants";
 import { isLoggedInUserOnboarded } from "@/lib/actions/user.actions";
 
 const Page = async () => {
-  const user = await currentUser();
+  let user = await currentUser();
+
+  let attempts = 0;
+  while (!user && attempts < 5) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    user = await currentUser();
+    attempts++;
+  }
 
   if (!user || (await isLoggedInUserOnboarded(user.id))) {
     redirect("/");
