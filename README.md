@@ -82,7 +82,7 @@ This project was brought to life by the following team members:
 
 - [Alexander Mc Lachlan](https://github.com/AlexDjangoX) - Software Developer
 - [Glen McCallum](https://github.com/glenmac90) - Software Developer
-- Taehong Min - Software Developer
+- [Taehong Min](https://github.com/DevTaehong) - Software Developer
 
 Each team member played a crucial role in the development of this project, and we appreciate their hard work and dedication!
 
