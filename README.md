@@ -6,7 +6,7 @@
 [![Stars](https://img.shields.io/github/stars/TyeStanley/hipnode?style=social)](https://hipnode-gold.vercel.app/)
 [![Fork](https://img.shields.io/github/forks/TyeStanley/hipnode?style=social)](https://hipnode-gold.vercel.app/)
 
-![demo](https://cdn.discordapp.com/attachments/571883066017185802/1199257200305119302/Screenshot_2024-01-22_at_11.39.35_PM.png?ex=65c1e24d&is=65af6d4d&hm=d07bffd7b57e0eaede6be11c97c591e7c4202187107b646070cb2f945762a453&)
+![demo](./public/readme/showcase.png)
 
 ![contributions](https://img.shields.io/badge/all_contributors-1-orange.svg)
 ![PRs](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=shields)
